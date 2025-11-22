@@ -202,7 +202,7 @@ contract OmnichainSuperAccountRouter is OApp {
      */
     function executeLocalAction(
         CrossChainAction calldata _action
-    ) external onlyAuthorized returns (bool success) {
+    ) external payable onlyAuthorized returns (bool success) {
         require(!executedActions[_action.actionId], "OmnichainRouter: action already executed");
         require(_action.userAccount != address(0), "OmnichainRouter: invalid user account");
         require(_action.targetAdapter != address(0), "OmnichainRouter: invalid adapter");
@@ -219,7 +219,7 @@ contract OmnichainSuperAccountRouter is OApp {
             );
         }
 
-        // Execute the action
+        // Execute the action with ETH value forwarded
         success = _executeAdapter(_action, msg.sender);
 
         // Mark as executed (replay protection)

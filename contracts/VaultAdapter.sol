@@ -54,7 +54,7 @@ contract VaultAdapter {
     function executeFromEIL(
         address userAccount,
         bytes calldata payload
-    ) external onlyRouter {
+    ) external payable onlyRouter {
         // Decode VaultAction
         VaultAction memory action = abi.decode(payload, (VaultAction));
         
@@ -64,8 +64,8 @@ contract VaultAdapter {
         bool success = false;
         
         if (action.operation == VaultOperation.Deposit) {
-            // Execute deposit on this chain
-            vault.deposit(action.amount);
+            // Execute deposit on this chain for the user with ETH value
+            vault.depositFor{value: action.amount}(action.user, action.amount);
             success = true;
             
         } else if (action.operation == VaultOperation.Withdraw) {

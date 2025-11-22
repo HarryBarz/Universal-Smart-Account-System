@@ -1,6 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
+interface IERC20 {
+    function transferFrom(address from, address to, uint256 amount) external returns (bool);
+    function transfer(address to, uint256 amount) external returns (bool);
+}
+
 /**
  * @title OmnichainVault
  * @dev Vault that aggregates deposits/withdrawals across multiple L2s via LayerZero
@@ -89,6 +94,34 @@ contract OmnichainVault {
         totalSupply += amount;
         
         emit Deposit(msg.sender, getChainId(), amount, userBalances[msg.sender]);
+    }
+    
+    /**
+     * @dev Deposit tokens on behalf of a user (called by router/adapter)
+     * @param user User address to credit the deposit to
+     * @param amount Amount to deposit
+     */
+    function depositFor(address user, uint256 amount) external payable onlyRouter {
+        require(user != address(0), "OmnichainVault: invalid user");
+        require(amount > 0, "OmnichainVault: amount must be > 0");
+        
+        // For native ETH deposits (token == address(0)), require msg.value to match amount
+        if (token == address(0)) {
+            require(msg.value == amount, "OmnichainVault: msg.value must equal amount for native ETH");
+            // ETH is automatically sent to this contract via payable
+        } else {
+            // For ERC20 tokens, transfer from router to vault
+            // The router should have approved this vault to spend tokens
+            require(IERC20(token).transferFrom(msg.sender, address(this), amount), "OmnichainVault: token transfer failed");
+        }
+        
+        // Update balances for the specified user
+        userBalances[user] += amount;
+        chainBalances[getChainId()] += amount;
+        userChainBalances[user][getChainId()] += amount;
+        totalSupply += amount;
+        
+        emit Deposit(user, getChainId(), amount, userBalances[user]);
     }
     
     /**

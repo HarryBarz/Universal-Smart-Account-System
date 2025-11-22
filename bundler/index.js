@@ -130,8 +130,32 @@ async function sendCrossChainMessage(chainId, adapterAddress, calldata, userAcco
       actionId: actionId
     };
     
-    // Execute local action through router
-    const tx = await router.executeLocalAction(action);
+    // Extract ETH amount from calldata for vault deposits
+    // Check if this is a vault adapter (deposit operation)
+    let ethValue = 0n;
+    try {
+      // Try to decode as VaultAction: (uint8 operation, address user, uint256 amount, uint32 targetChainId)
+      // If operation == 0 (Deposit) and adapter is VaultAdapter, extract amount
+      const vaultAdapterA = deployments.chainA?.VaultAdapter;
+      const vaultAdapterB = deployments.chainB?.VaultAdapter;
+      if (adapterAddress === vaultAdapterA || adapterAddress === vaultAdapterB) {
+        const decoded = ethers.AbiCoder.defaultAbiCoder().decode(
+          ["uint8", "address", "uint256", "uint32"],
+          calldata
+        );
+        const operation = decoded[0]; // 0 = Deposit
+        if (operation === 0n) {
+          ethValue = decoded[2]; // amount
+          console.log(`Vault deposit detected: sending ${ethers.formatEther(ethValue)} ETH with transaction`);
+        }
+      }
+    } catch (e) {
+      // Not a vault action or decode failed, no ETH to send
+      console.log("Not a vault deposit or decode failed, no ETH value");
+    }
+    
+    // Execute local action through router with ETH value for vault deposits
+    const tx = await router.executeLocalAction(action, { value: ethValue });
     await tx.wait();
     
     console.log(`SUCCESS: Local action executed through router on chain ${chainId}, tx: ${tx.hash}`);
