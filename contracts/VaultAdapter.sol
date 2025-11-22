@@ -65,7 +65,9 @@ contract VaultAdapter {
         
         if (action.operation == VaultOperation.Deposit) {
             // Execute deposit on this chain for the user with ETH value
-            vault.depositFor{value: action.amount}(action.user, action.amount);
+            // Use msg.value (forwarded from router) and verify it matches action.amount
+            require(msg.value == action.amount, "VaultAdapter: msg.value must equal amount");
+            vault.depositFor{value: msg.value}(action.user, action.amount);
             success = true;
             
         } else if (action.operation == VaultOperation.Withdraw) {

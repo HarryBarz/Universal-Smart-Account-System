@@ -264,8 +264,9 @@ contract OmnichainSuperAccountRouter is OApp {
             _action.adapterCalldata
         );
 
-        // Call adapter
-        (success, ) = _action.targetAdapter.call(adapterCallData);
+        // Forward ETH value to adapter (for vault deposits)
+        // msg.value will be forwarded from executeLocalAction()
+        (success, ) = _action.targetAdapter.call{value: msg.value}(adapterCallData);
 
         // Log execution for debugging
         if (!success) {
