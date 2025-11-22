@@ -11,8 +11,9 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Load .env from parent directory (project root)
+// Load .env from parent directory (project root) or current directory
 dotenv.config({ path: path.join(__dirname, "..", ".env") });
+dotenv.config(); // Also try current directory (for Railway deployment)
 
 const app = express();
 app.use(cors());
@@ -20,11 +21,17 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 3001;
 
-// Load deployment addresses
-const deploymentsPath = path.join(__dirname, "..", "deployments.json");
+// Load deployment addresses (try current directory first for Railway, then parent)
 let deployments = {};
-if (fs.existsSync(deploymentsPath)) {
-  deployments = JSON.parse(fs.readFileSync(deploymentsPath, "utf8"));
+const deploymentsPaths = [
+  path.join(__dirname, "deployments.json"), // Current directory (Railway)
+  path.join(__dirname, "..", "deployments.json"), // Parent directory (local)
+];
+for (const deploymentsPath of deploymentsPaths) {
+  if (fs.existsSync(deploymentsPath)) {
+    deployments = JSON.parse(fs.readFileSync(deploymentsPath, "utf8"));
+    break;
+  }
 }
 
 // Setup providers

@@ -1,0 +1,28 @@
+{
+  "chainA": {
+    "SwapAdapter": "0xf233E878cf4779a2CD32b491e88De413C452d99E",
+    "network": "chainA",
+    "deployer": "0x8d319A2612F0bC8BDdd91Ffd8FEA0fb559989eEf",
+    "trustedRouter": "0x193508819A9b42040b6C495507B31a0fDEFA1B9F",
+    "SuperAccount": "0x5b4a57A0009A3fF13d76FfBDf6407eE738b5606B",
+    "EILRouter": "0x3919B55507EF76a70DebbCFdBFb9d1582CFeB230",
+    "EntryPoint": "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789",
+    "Owner": "0x8d319a2612f0bc8bddd91ffd8fea0fb559989eef",
+    "OmnichainSuperAccountRouter": "0x193508819A9b42040b6C495507B31a0fDEFA1B9F",
+    "LayerZeroEndpoint": "0x6EDCE65403992e310A62460808c4b910D972f10f",
+    "OmnichainVault": "0xe309b571bCF6B3bDF23c953c55Cdad4A5b38d699",
+    "VaultAdapter": "0xbf823b628212042C4265e9a037DdAA2D51D321d0",
+    "vaultToken": "0x0000000000000000000000000000000000000000"
+  },
+  "chainB": {
+    "NFTAdapter": "0x0f94ccFc56524fd98D203e6eD92cd79F28013B00",
+    "network": "chainB",
+    "deployer": "0x8d319A2612F0bC8BDdd91Ffd8FEA0fb559989eEf",
+    "trustedRouter": "0x1A27b42B8E847fb4b5654B482b63ca565258BAA4",
+    "OmnichainSuperAccountRouter": "0x1A27b42B8E847fb4b5654B482b63ca565258BAA4",
+    "LayerZeroEndpoint": "0x6EDCE65403992e310A62460808c4b910D972f10f",
+    "OmnichainVault": "0xA4902F0Bff5Eede851a9dEa4214441cE21aBcb55",
+    "VaultAdapter": "0xf233E878cf4779a2CD32b491e88De413C452d99E",
+    "vaultToken": "0x0000000000000000000000000000000000000000"
+  }
+}
