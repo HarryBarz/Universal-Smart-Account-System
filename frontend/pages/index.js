@@ -4,7 +4,7 @@ import { ethers } from "ethers";
 import SignFlow from "../components/SignFlow";
 import VaultFlow from "../components/VaultFlow";
 
-const BUNDLER_URL = process.env.NEXT_PUBLIC_BUNDLER_URL || "http://localhost:3001";
+const BUNDLER_URL = process.env.NEXT_PUBLIC_BUNDLER_URL || "https://universal-smart-account-system-production.up.railway.app";
 
 // Load contract addresses from deployments.json
 const getDeploymentAddresses = () => {
