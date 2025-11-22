@@ -1,0 +1,117 @@
+{
+  "description": "EIL (Ethereum Interop Layer) Composite Payload Examples",
+  "version": "1.0.0",
+  "examples": [
+    {
+      "name": "Swap + NFT Mint Payload",
+      "description": "Example payload for swapping on Chain A and minting NFT on Chain B",
+      "payload": {
+        "userAccount": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
+        "actions": [
+          {
+            "chainId": 84532,
+            "adapter": "0x0000000000000000000000000000000000000000",
+            "calldata": "0x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000038d7ea4c6800000000000000000000000000000000000000000000000000000000000000000"
+          },
+          {
+            "chainId": 421614,
+            "adapter": "0x0000000000000000000000000000000000000000",
+            "calldata": "0x0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000042616679626569676479727a74357366703775646d37687537367568377932366e6633656675796c71616266336f636c67747179353566627a6469000000000000000000"
+          }
+        ],
+        "fileOps": [
+          {
+            "cid": "bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi",
+            "purpose": "nftMetadata"
+          }
+        ],
+        "timestamp": 1704067200
+      },
+      "decoded_actions": {
+        "swap": {
+          "tokenIn": "0x0000000000000000000000000000000000000000",
+          "tokenOut": "0x0000000000000000000000000000000000000000",
+          "amountIn": "1000000000000000",
+          "amountOutMin": "0"
+        },
+        "nftMint": {
+          "cid": "bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi"
+        }
+      }
+    },
+    {
+      "name": "NFT Mint Only",
+      "description": "Simple payload for minting NFT with Filecoin CID",
+      "payload": {
+        "userAccount": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
+        "actions": [
+          {
+            "chainId": 421614,
+            "adapter": "0x1234567890123456789012345678901234567890",
+            "calldata": "0x0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000042616679626569676479727a74357366703775646d37687537367568377932366e6633656675796c71616266336f636c67747179353566627a6469000000000000000000"
+          }
+        ],
+        "fileOps": [
+          {
+            "cid": "bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi",
+            "purpose": "nftMetadata"
+          }
+        ],
+        "timestamp": 1704067200
+      }
+    },
+    {
+      "name": "Multi-Chain Batch",
+      "description": "Batch payload with multiple actions across chains",
+      "payload": {
+        "userAccount": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
+        "actions": [
+          {
+            "chainId": 84532,
+            "adapter": "0xABCDEF1234567890ABCDEF1234567890ABCDEF12",
+            "calldata": "0x1234...",
+            "description": "Swap 0.001 ETH on Base Sepolia"
+          },
+          {
+            "chainId": 421614,
+            "adapter": "0x9876543210987654321098765432109876543210",
+            "calldata": "0x5678...",
+            "description": "Mint NFT on Arbitrum Sepolia"
+          }
+        ],
+        "fileOps": [
+          {
+            "cid": "bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi",
+            "purpose": "nftMetadata",
+            "metadata": {
+              "name": "Super Account NFT",
+              "description": "NFT minted via chain-abstracted Super Account",
+              "image": "ipfs://bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi/image.png"
+            }
+          }
+        ],
+        "timestamp": 1704067200
+      }
+    }
+  ],
+  "encoding_details": {
+    "swap_calldata": {
+      "abi": ["address", "address", "uint256", "uint256"],
+      "params": ["tokenIn", "tokenOut", "amountIn", "amountOutMin"],
+      "example": "ethers.AbiCoder.defaultAbiCoder().encode(['address', 'address', 'uint256', 'uint256'], [tokenIn, tokenOut, amountIn, amountOutMin])"
+    },
+    "nft_calldata": {
+      "abi": ["string"],
+      "params": ["cid"],
+      "example": "ethers.AbiCoder.defaultAbiCoder().encode(['string'], [cid])"
+    }
+  },
+  "notes": [
+    "All addresses should be checksummed",
+    "Chain IDs: 84532 (Base Sepolia), 421614 (Arbitrum Sepolia)",
+    "CIDs are IPFS Content Identifiers from Filecoin uploads",
+    "Calldata is ABI-encoded hex strings",
+    "Timestamp is Unix epoch in seconds"
+  ]
+}
+

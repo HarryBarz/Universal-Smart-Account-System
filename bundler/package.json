@@ -1,0 +1,17 @@
+{
+  "name": "super-account-bundler",
+  "version": "1.0.0",
+  "description": "Bundler/Orchestrator service for Super Account MVP",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "axios": "^1.6.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
+    "ethers": "^6.9.0",
+    "express": "^4.21.2"
+  }
+}
