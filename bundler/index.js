@@ -452,6 +452,22 @@ app.post("/api/process-payload", async (req, res) => {
 });
 
 /**
+ * Root route
+ */
+app.get("/", (req, res) => {
+  res.json({
+    status: "ok",
+    message: "Bundler/Orchestrator API",
+    endpoints: {
+      health: "GET /health",
+      processPayload: "POST /api/process-payload"
+    },
+    mode: HACK_MODE ? "HACK_MODE" : "LAYERZERO",
+    bundlerAddress: bundlerWallet?.address || "NOT CONFIGURED",
+  });
+});
+
+/**
  * Health check
  */
 app.get("/health", (req, res) => {
