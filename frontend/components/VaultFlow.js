@@ -383,26 +383,50 @@ export default function VaultFlow({
       </div>
 
       {/* Dashboard Balance Display */}
-      <div style={{ 
-        marginBottom: "1.5rem", 
-        padding: "1.5rem", 
-        background: "linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%)",
-        borderRadius: "0.75rem",
-        border: "1px solid var(--border)",
-        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)"
+      <div className="card" style={{ 
+        marginBottom: "24px",
+        background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+        border: "none",
+        boxShadow: "0 10px 25px rgba(99, 102, 241, 0.3), 0 4px 6px rgba(0, 0, 0, 0.1)",
+        position: "relative",
+        overflow: "hidden"
       }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
-          <h3 style={{ margin: 0, color: "white", fontSize: "1.125rem" }}>Your Vault Dashboard</h3>
+        <div style={{ 
+          position: "absolute",
+          top: -50,
+          right: -50,
+          width: "200px",
+          height: "200px",
+          background: "radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%)",
+          borderRadius: "50%"
+        }}></div>
+        <div style={{ 
+          position: "absolute",
+          bottom: -30,
+          left: -30,
+          width: "150px",
+          height: "150px",
+          background: "radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%)",
+          borderRadius: "50%"
+        }}></div>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px", position: "relative", zIndex: 1 }}>
+          <div>
+            <h3 style={{ margin: 0, color: "white", fontSize: "20px", fontWeight: "700", marginBottom: "4px", letterSpacing: "-0.01em" }}>Your Vault Dashboard</h3>
+            <p style={{ margin: 0, color: "rgba(255, 255, 255, 0.8)", fontSize: "13px", fontWeight: "400" }}>Total balance across all chains</p>
+          </div>
           <button
             onClick={loadBalance}
             disabled={loadingBalance}
             className="btn"
             style={{ 
-              padding: "0.5rem 1rem", 
-              fontSize: "0.875rem",
+              padding: "10px 20px", 
+              fontSize: "13px",
+              fontWeight: "600",
               background: "rgba(255, 255, 255, 0.2)",
+              backdropFilter: "blur(10px)",
               color: "white",
-              border: "1px solid rgba(255, 255, 255, 0.3)"
+              border: "1px solid rgba(255, 255, 255, 0.3)",
+              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)"
             }}
           >
             {loadingBalance ? "Loading..." : "Refresh"}
