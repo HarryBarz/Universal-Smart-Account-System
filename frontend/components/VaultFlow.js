@@ -434,46 +434,71 @@ export default function VaultFlow({
         </div>
         
         {vaultBalance !== null ? (
-          <>
-            <div style={{ marginBottom: "1rem" }}>
-              <div style={{ color: "rgba(255, 255, 255, 0.8)", fontSize: "0.875rem", marginBottom: "0.25rem" }}>
-                Total Balance (All Chains)
+          <div style={{ 
+            display: "grid", 
+            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", 
+            gap: "16px",
+            marginTop: "8px",
+            position: "relative",
+            zIndex: 1
+          }}>
+            <div style={{ 
+              padding: "20px", 
+              background: "rgba(255, 255, 255, 0.2)",
+              backdropFilter: "blur(20px)",
+              borderRadius: "16px",
+              border: "1px solid rgba(255, 255, 255, 0.3)",
+              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+              transition: "all 0.3s ease"
+            }}>
+              <div style={{ color: "rgba(255, 255, 255, 0.8)", fontSize: "11px", marginBottom: "10px", textTransform: "uppercase", letterSpacing: "0.8px", fontWeight: "600" }}>
+                Total Balance
               </div>
-              <div style={{ color: "white", fontSize: "2rem", fontWeight: "bold" }}>
-                {parseFloat(vaultBalance).toFixed(6)} ETH
+              <div style={{ color: "white", fontSize: "28px", fontWeight: "800", lineHeight: "1.2", letterSpacing: "-0.02em" }}>
+                {parseFloat(vaultBalance).toFixed(6)}
               </div>
+              <div style={{ color: "rgba(255, 255, 255, 0.7)", fontSize: "13px", marginTop: "4px", fontWeight: "500" }}>ETH</div>
             </div>
             
-            {/* Per-chain balances */}
             <div style={{ 
-              display: "grid", 
-              gridTemplateColumns: "1fr 1fr", 
-              gap: "1rem",
-              marginTop: "1rem",
-              paddingTop: "1rem",
-              borderTop: "1px solid rgba(255, 255, 255, 0.2)"
+              padding: "20px", 
+              background: "rgba(255, 255, 255, 0.2)",
+              backdropFilter: "blur(20px)",
+              borderRadius: "16px",
+              border: "1px solid rgba(255, 255, 255, 0.3)",
+              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+              transition: "all 0.3s ease"
             }}>
-              <div>
-                <div style={{ color: "rgba(255, 255, 255, 0.8)", fontSize: "0.75rem", marginBottom: "0.25rem" }}>
-                  Base Sepolia
-                </div>
-                <div style={{ color: "white", fontSize: "1.25rem", fontWeight: "600" }}>
-                  {chainBalances.chainA !== null ? chainBalances.chainA.toFixed(6) : "0.0"} ETH
-                </div>
+              <div style={{ color: "rgba(255, 255, 255, 0.8)", fontSize: "11px", marginBottom: "10px", textTransform: "uppercase", letterSpacing: "0.8px", fontWeight: "600" }}>
+                Base Sepolia
               </div>
-              <div>
-                <div style={{ color: "rgba(255, 255, 255, 0.8)", fontSize: "0.75rem", marginBottom: "0.25rem" }}>
-                  Arbitrum Sepolia
-                </div>
-                <div style={{ color: "white", fontSize: "1.25rem", fontWeight: "600" }}>
-                  {chainBalances.chainB !== null ? chainBalances.chainB.toFixed(6) : "0.0"} ETH
-                </div>
+              <div style={{ color: "white", fontSize: "24px", fontWeight: "700", lineHeight: "1.2" }}>
+                {chainBalances.chainA !== null ? `${chainBalances.chainA.toFixed(6)}` : "0.000000"}
               </div>
+              <div style={{ color: "rgba(255, 255, 255, 0.7)", fontSize: "13px", marginTop: "4px", fontWeight: "500" }}>ETH</div>
             </div>
-          </>
+            
+            <div style={{ 
+              padding: "20px", 
+              background: "rgba(255, 255, 255, 0.2)",
+              backdropFilter: "blur(20px)",
+              borderRadius: "16px",
+              border: "1px solid rgba(255, 255, 255, 0.3)",
+              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+              transition: "all 0.3s ease"
+            }}>
+              <div style={{ color: "rgba(255, 255, 255, 0.8)", fontSize: "11px", marginBottom: "10px", textTransform: "uppercase", letterSpacing: "0.8px", fontWeight: "600" }}>
+                Arbitrum Sepolia
+              </div>
+              <div style={{ color: "white", fontSize: "24px", fontWeight: "700", lineHeight: "1.2" }}>
+                {chainBalances.chainB !== null ? `${chainBalances.chainB.toFixed(6)}` : "0.000000"}
+              </div>
+              <div style={{ color: "rgba(255, 255, 255, 0.7)", fontSize: "13px", marginTop: "4px", fontWeight: "500" }}>ETH</div>
+            </div>
+          </div>
         ) : (
-          <div style={{ color: "white", textAlign: "center", padding: "1rem" }}>
-            {loadingBalance ? "Loading balance..." : "Connect wallet to view balance"}
+          <div style={{ textAlign: "center", padding: "48px 24px", color: "rgba(255, 255, 255, 0.8)", fontSize: "14px", position: "relative", zIndex: 1 }}>
+            {loadingBalance ? "Loading balance..." : "Click Refresh to load balance"}
           </div>
         )}
       </div>
