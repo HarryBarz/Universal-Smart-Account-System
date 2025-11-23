@@ -31,7 +31,11 @@ export default function VaultFlow({
     try {
       const vaultABI = [
         "function getTotalBalance(address user) external view returns (uint256)",
-        "function getChainBalance(address user, uint32 chainId) external view returns (uint256)"
+        "function getPrincipalBalance(address user) external view returns (uint256)",
+        "function getAccruedYield(address user) external view returns (uint256)",
+        "function calculatePendingYield(address user) external view returns (uint256)",
+        "function getChainBalance(address user, uint32 chainId) external view returns (uint256)",
+        "function getAPYRate() external view returns (uint256)"
       ];
       
       const balances = { chainA: null, chainB: null };
@@ -51,9 +55,14 @@ export default function VaultFlow({
           const providerA = new ethers.JsonRpcProvider("https://sepolia.base.org");
           const vaultContractA = new ethers.Contract(vaultA, vaultABI, providerA);
           const balanceA = await vaultContractA.getTotalBalance(account);
+          const principalA = await vaultContractA.getPrincipalBalance(account);
+          const yieldA = await vaultContractA.calculatePendingYield(account);
+          
           const balanceAFormatted = parseFloat(ethers.formatEther(balanceA));
           balances.chainA = balanceAFormatted;
           totalBalance += balanceAFormatted;
+          
+          console.log(`Chain A - Principal: ${ethers.formatEther(principalA)}, Yield: ${ethers.formatEther(yieldA)}, Total: ${balanceAFormatted}`);
         } catch (error) {
           console.error("Error loading Chain A balance:", error);
         }
@@ -65,9 +74,14 @@ export default function VaultFlow({
           const providerB = new ethers.JsonRpcProvider("https://sepolia-rollup.arbitrum.io/rpc");
           const vaultContractB = new ethers.Contract(vaultB, vaultABI, providerB);
           const balanceB = await vaultContractB.getTotalBalance(account);
+          const principalB = await vaultContractB.getPrincipalBalance(account);
+          const yieldB = await vaultContractB.calculatePendingYield(account);
+          
           const balanceBFormatted = parseFloat(ethers.formatEther(balanceB));
           balances.chainB = balanceBFormatted;
           totalBalance += balanceBFormatted;
+          
+          console.log(`Chain B - Principal: ${ethers.formatEther(principalB)}, Yield: ${ethers.formatEther(yieldB)}, Total: ${balanceBFormatted}`);
         } catch (error) {
           console.error("Error loading Chain B balance:", error);
         }

@@ -43,7 +43,7 @@ contract VaultAdapter {
         require(_trustedRouter != address(0), "VaultAdapter: invalid router");
         require(_vault != address(0), "VaultAdapter: invalid vault");
         trustedRouter = _trustedRouter;
-        vault = OmnichainVault(_vault);
+        vault = OmnichainVault(payable(_vault));
     }
     
     /**

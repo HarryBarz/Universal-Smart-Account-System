@@ -28,12 +28,18 @@ async function main() {
   const tokenAddress = process.env.TOKEN_ADDRESS || "0x0000000000000000000000000000000000000000";
   console.log("Token address:", tokenAddress);
 
+  // APY rate in basis points (e.g., 500 = 5%, 1000 = 10%)
+  // Default to 5% APY for MVP
+  const apyRate = process.env.VAULT_APY || 500; // 500 = 5%
+  console.log("Vault APY rate:", apyRate, "basis points (", apyRate / 100, "%)");
+
   // Deploy OmnichainVault
   const OmnichainVault = await hre.ethers.getContractFactory("OmnichainVault");
-  const vault = await OmnichainVault.deploy(tokenAddress, routerAddress);
+  const vault = await OmnichainVault.deploy(tokenAddress, routerAddress, apyRate);
   await vault.waitForDeployment();
   const vaultAddress = await vault.getAddress();
   console.log("OmnichainVault deployed to:", vaultAddress);
+  console.log("APY rate set to:", apyRate, "basis points");
 
   // Deploy VaultAdapter
   const VaultAdapter = await hre.ethers.getContractFactory("VaultAdapter");

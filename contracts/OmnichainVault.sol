@@ -30,6 +30,21 @@ contract OmnichainVault {
     // Total supply across all chains
     uint256 public totalSupply;
     
+    // Yield generation
+    uint256 public apyRate; // APY in basis points (e.g., 500 = 5%)
+    uint256 public constant BASIS_POINTS = 10000;
+    uint256 public constant SECONDS_PER_YEAR = 365 days;
+    
+    // Track user deposits for yield calculation
+    mapping(address => uint256) public userDepositTimestamps; // Last deposit timestamp
+    mapping(address => uint256) public userLastYieldAccrual; // Last time yield was calculated
+    
+    // Accumulated yield per user
+    mapping(address => uint256) public userAccumulatedYield;
+    
+    // Total yield generated across all chains
+    uint256 public totalYieldGenerated;
+    
     event Deposit(
         address indexed user,
         uint32 chainId,
@@ -68,13 +83,14 @@ contract OmnichainVault {
         _;
     }
     
-    constructor(address _token, address _router) {
+    constructor(address _token, address _router, uint256 _apyRate) {
         // Allow address(0) for native ETH deposits (MVP)
         // require(_token != address(0), "OmnichainVault: invalid token");
         require(_router != address(0), "OmnichainVault: invalid router");
         token = _token; // address(0) means native ETH
         router = _router;
         owner = msg.sender;
+        apyRate = _apyRate; // APY in basis points (e.g., 500 = 5%)
     }
     
     /**
@@ -105,6 +121,9 @@ contract OmnichainVault {
         require(user != address(0), "OmnichainVault: invalid user");
         require(amount > 0, "OmnichainVault: amount must be > 0");
         
+        // Accrue yield for user before updating balance
+        _accrueYield(user);
+        
         // For native ETH deposits (token == address(0)), require msg.value to match amount
         if (token == address(0)) {
             require(msg.value == amount, "OmnichainVault: msg.value must equal amount for native ETH");
@@ -121,6 +140,12 @@ contract OmnichainVault {
         userChainBalances[user][getChainId()] += amount;
         totalSupply += amount;
         
+        // Update deposit timestamp for yield calculation
+        if (userDepositTimestamps[user] == 0) {
+            userDepositTimestamps[user] = block.timestamp;
+        }
+        userLastYieldAccrual[user] = block.timestamp;
+        
         emit Deposit(user, getChainId(), amount, userBalances[user]);
     }
     
@@ -130,7 +155,13 @@ contract OmnichainVault {
      */
     function withdraw(uint256 amount) external {
         require(amount > 0, "OmnichainVault: amount must be > 0");
-        require(userBalances[msg.sender] >= amount, "OmnichainVault: insufficient balance");
+        
+        // Accrue yield before withdrawal
+        _accrueYield(msg.sender);
+        
+        // Check balance after yield accrual
+        uint256 totalBalance = userBalances[msg.sender] + userAccumulatedYield[msg.sender];
+        require(totalBalance >= amount, "OmnichainVault: insufficient balance");
         
         // Check if this chain has enough balance
         uint32 currentChainId = getChainId();
@@ -225,22 +256,117 @@ contract OmnichainVault {
     function _withdrawLocal(address user, uint256 amount) internal {
         uint32 chainId = getChainId();
         
-        userBalances[user] -= amount;
-        chainBalances[chainId] -= amount;
-        userChainBalances[user][chainId] -= amount;
-        totalSupply -= amount;
+        // Deduct from accumulated yield first, then from principal
+        if (userAccumulatedYield[user] > 0 && userAccumulatedYield[user] >= amount) {
+            // Withdraw from yield only
+            userAccumulatedYield[user] -= amount;
+            totalYieldGenerated -= amount;
+        } else if (userAccumulatedYield[user] > 0) {
+            // Withdraw yield first, then principal
+            uint256 yieldToWithdraw = userAccumulatedYield[user];
+            uint256 principalToWithdraw = amount - yieldToWithdraw;
+            
+            userAccumulatedYield[user] = 0;
+            totalYieldGenerated -= yieldToWithdraw;
+            
+            userBalances[user] -= principalToWithdraw;
+            chainBalances[chainId] -= principalToWithdraw;
+            userChainBalances[user][chainId] -= principalToWithdraw;
+            totalSupply -= principalToWithdraw;
+        } else {
+            // Withdraw from principal only
+            userBalances[user] -= amount;
+            chainBalances[chainId] -= amount;
+            userChainBalances[user][chainId] -= amount;
+            totalSupply -= amount;
+        }
         
         // Transfer tokens to user
         // In production: IERC20(token).transfer(user, amount);
+        // For native ETH:
+        if (token == address(0)) {
+            payable(user).transfer(amount);
+        }
         
-        emit Withdraw(user, chainId, amount, userBalances[user]);
+        uint256 remainingBalance = userBalances[user] + userAccumulatedYield[user];
+        emit Withdraw(user, chainId, amount, remainingBalance);
     }
     
     /**
-     * @dev Get user's total balance across all chains
+     * @dev Accrue yield for a user based on time and balance
+     */
+    function _accrueYield(address user) internal {
+        if (userBalances[user] == 0 || apyRate == 0) {
+            userLastYieldAccrual[user] = block.timestamp;
+            return;
+        }
+        
+        uint256 lastAccrual = userLastYieldAccrual[user];
+        if (lastAccrual == 0) {
+            lastAccrual = userDepositTimestamps[user];
+            if (lastAccrual == 0) {
+                userLastYieldAccrual[user] = block.timestamp;
+                return;
+            }
+        }
+        
+        uint256 timeElapsed = block.timestamp - lastAccrual;
+        if (timeElapsed == 0) return;
+        
+        // Calculate yield: principal * APY * timeElapsed / SECONDS_PER_YEAR
+        // APY is in basis points (e.g., 500 = 5%)
+        uint256 principal = userBalances[user];
+        uint256 yield = (principal * apyRate * timeElapsed) / (BASIS_POINTS * SECONDS_PER_YEAR);
+        
+        if (yield > 0) {
+            userAccumulatedYield[user] += yield;
+            totalYieldGenerated += yield;
+        }
+        
+        userLastYieldAccrual[user] = block.timestamp;
+    }
+    
+    /**
+     * @dev Calculate pending yield for a user (without modifying state)
+     */
+    function calculatePendingYield(address user) external view returns (uint256) {
+        if (userBalances[user] == 0 || apyRate == 0) return 0;
+        
+        uint256 lastAccrual = userLastYieldAccrual[user];
+        if (lastAccrual == 0) {
+            lastAccrual = userDepositTimestamps[user];
+            if (lastAccrual == 0) return 0;
+        }
+        
+        uint256 timeElapsed = block.timestamp - lastAccrual;
+        if (timeElapsed == 0) return 0;
+        
+        uint256 principal = userBalances[user];
+        uint256 yield = (principal * apyRate * timeElapsed) / (BASIS_POINTS * SECONDS_PER_YEAR);
+        
+        return userAccumulatedYield[user] + yield;
+    }
+    
+    /**
+     * @dev Get user's total balance across all chains (including accrued yield)
      */
     function getTotalBalance(address user) external view returns (uint256) {
+        uint256 pendingYield = this.calculatePendingYield(user);
+        return userBalances[user] + pendingYield;
+    }
+    
+    /**
+     * @dev Get user's principal balance (excluding yield)
+     */
+    function getPrincipalBalance(address user) external view returns (uint256) {
         return userBalances[user];
+    }
+    
+    /**
+     * @dev Get user's accrued yield
+     */
+    function getAccruedYield(address user) external view returns (uint256) {
+        return userAccumulatedYield[user];
     }
     
     /**
@@ -265,6 +391,29 @@ contract OmnichainVault {
     function setRouter(address _router) external onlyOwner {
         require(_router != address(0), "OmnichainVault: invalid router");
         router = _router;
+    }
+    
+    /**
+     * @dev Update APY rate (owner only)
+     * @param _apyRate APY in basis points (e.g., 500 = 5%)
+     */
+    function setAPYRate(uint256 _apyRate) external onlyOwner {
+        require(_apyRate <= BASIS_POINTS * 100, "OmnichainVault: APY too high"); // Max 100%
+        apyRate = _apyRate;
+    }
+    
+    /**
+     * @dev Get current APY rate
+     */
+    function getAPYRate() external view returns (uint256) {
+        return apyRate;
+    }
+    
+    /**
+     * @dev Receive ETH (for native deposits)
+     */
+    receive() external payable {
+        // Allow receiving ETH for deposits
     }
 }
 
