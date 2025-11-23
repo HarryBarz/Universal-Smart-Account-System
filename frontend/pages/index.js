@@ -3,6 +3,7 @@ import Head from "next/head";
 import { ethers } from "ethers";
 import SignFlow from "../components/SignFlow";
 import VaultFlow from "../components/VaultFlow";
+import ContractInteractions from "../components/ContractInteractions";
 
 const BUNDLER_URL = process.env.NEXT_PUBLIC_BUNDLER_URL || "https://universal-smart-account-system-production.up.railway.app";
 
@@ -17,6 +18,10 @@ const getDeploymentAddresses = () => {
       vaultAdapterA: deployments.chainA?.VaultAdapter,
       vaultB: deployments.chainB?.OmnichainVault,
       vaultAdapterB: deployments.chainB?.VaultAdapter,
+      vaultTokenA: deployments.chainA?.vaultToken || deployments.chainA?.OmnichainVaultToken,
+      vaultTokenB: deployments.chainB?.vaultToken || deployments.chainB?.OmnichainVaultToken,
+      routerA: deployments.chainA?.OmnichainSuperAccountRouter,
+      routerB: deployments.chainB?.OmnichainSuperAccountRouter,
       chainAId: 84532, // Base Sepolia
       chainBId: 421614, // Arbitrum Sepolia
     };
@@ -41,7 +46,7 @@ export default function Home() {
   const [txLinks, setTxLinks] = useState([]);
   const [nftMetadata, setNftMetadata] = useState(null);
   const [progress, setProgress] = useState(0);
-  const [activeTab, setActiveTab] = useState("demo"); // "demo" or "vault"
+  const [activeTab, setActiveTab] = useState("demo"); // "demo", "vault", or "contracts"
   const [deploymentAddresses] = useState(getDeploymentAddresses());
 
   useEffect(() => {
@@ -220,6 +225,13 @@ export default function Home() {
           >
             Omnichain Vault
           </button>
+          <button
+            onClick={() => setActiveTab("contracts")}
+            className={activeTab === "contracts" ? "btn btn-primary" : "btn"}
+            style={{ padding: "0.75rem 1.5rem" }}
+          >
+            Contract Interactions
+          </button>
         </div>
       </header>
 
@@ -357,6 +369,49 @@ export default function Home() {
                 onStatusUpdate={updateStatus}
                 onTxLinks={setTxLinks}
                 onProgress={setProgress}
+              />
+            </div>
+          )}
+        </>
+      )}
+
+      {activeTab === "contracts" && (
+        <>
+          <div className="card">
+            <h2>
+              <span className="step-number">1</span>
+              Connect Wallet
+            </h2>
+            {!account ? (
+              <button onClick={connectWallet} className="btn btn-primary">
+                Connect MetaMask
+              </button>
+            ) : (
+              <div className="account-display">
+                <span>Connected:</span>
+                <strong>{formatAddress(account)}</strong>
+              </div>
+            )}
+          </div>
+
+          {account && (
+            <div className="card">
+              <h2>
+                <span className="step-number">2</span>
+                Direct Contract Function Calls
+              </h2>
+              <ContractInteractions
+                account={account}
+                provider={provider}
+                vaultA={deploymentAddresses.vaultA}
+                vaultB={deploymentAddresses.vaultB}
+                vaultTokenA={deploymentAddresses.vaultTokenA}
+                vaultTokenB={deploymentAddresses.vaultTokenB}
+                routerA={deploymentAddresses.routerA}
+                routerB={deploymentAddresses.routerB}
+                chainAId={deploymentAddresses.chainAId}
+                chainBId={deploymentAddresses.chainBId}
+                onStatusUpdate={updateStatus}
               />
             </div>
           )}
