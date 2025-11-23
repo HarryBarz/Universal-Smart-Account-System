@@ -392,82 +392,111 @@ export default function ContractInteractions({
         </div>
 
         {vaultBalance !== null ? (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "16px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "20px" }}>
             <div style={{
-              padding: "16px",
-              background: "var(--bg-card)",
-              borderRadius: "8px",
-              border: "1px solid var(--border)",
-              boxShadow: "var(--shadow)"
+              padding: "24px",
+              background: "linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(139, 92, 246, 0.08) 100%)",
+              borderRadius: "16px",
+              border: "1px solid rgba(99, 102, 241, 0.2)",
+              boxShadow: "var(--shadow-md)",
+              transition: "all 0.3s ease",
+              position: "relative",
+              overflow: "hidden"
             }}>
-              <div style={{ fontSize: "11px", color: "var(--text-muted)", marginBottom: "8px", textTransform: "uppercase", letterSpacing: "0.5px", fontWeight: "500" }}>
+              <div style={{ 
+                position: "absolute",
+                top: 0,
+                right: 0,
+                width: "80px",
+                height: "80px",
+                background: "radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%)",
+                borderRadius: "50%",
+                transform: "translate(20px, -20px)"
+              }}></div>
+              <div style={{ fontSize: "11px", color: "var(--text-muted)", marginBottom: "10px", textTransform: "uppercase", letterSpacing: "0.8px", fontWeight: "600" }}>
                 Total Balance
               </div>
-              <div style={{ fontSize: "24px", fontWeight: "600", color: "var(--text)", lineHeight: "1.2" }}>
+              <div style={{ fontSize: "28px", fontWeight: "700", background: "var(--gradient-primary)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text", lineHeight: "1.2", position: "relative", zIndex: 1 }}>
                 {parseFloat(vaultBalance).toFixed(6)}
               </div>
-              <div style={{ fontSize: "12px", color: "var(--text-muted)", marginTop: "4px" }}>ETH</div>
+              <div style={{ fontSize: "13px", color: "var(--text-muted)", marginTop: "6px", fontWeight: "500", position: "relative", zIndex: 1 }}>ETH</div>
             </div>
             
             <div style={{
-              padding: "16px",
+              padding: "24px",
               background: "var(--bg-card)",
-              borderRadius: "8px",
-              border: "1px solid var(--border)",
-              boxShadow: "var(--shadow)"
+              borderRadius: "16px",
+              border: "1.5px solid var(--border)",
+              boxShadow: "var(--shadow-md)",
+              transition: "all 0.3s ease",
+              position: "relative",
+              overflow: "hidden"
             }}>
-              <div style={{ fontSize: "11px", color: "var(--text-muted)", marginBottom: "8px", textTransform: "uppercase", letterSpacing: "0.5px", fontWeight: "500" }}>
+              <div style={{ 
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                height: "3px",
+                background: "var(--gradient-primary)",
+                opacity: 0,
+                transition: "opacity 0.3s ease"
+              }}></div>
+              <div style={{ fontSize: "11px", color: "var(--text-muted)", marginBottom: "10px", textTransform: "uppercase", letterSpacing: "0.8px", fontWeight: "600" }}>
                 Principal
               </div>
-              <div style={{ fontSize: "20px", fontWeight: "600", color: "var(--text)", lineHeight: "1.2" }}>
+              <div style={{ fontSize: "24px", fontWeight: "700", color: "var(--text)", lineHeight: "1.2" }}>
                 {parseFloat(principalBalance).toFixed(6)}
               </div>
-              <div style={{ fontSize: "12px", color: "var(--text-muted)", marginTop: "4px" }}>ETH</div>
+              <div style={{ fontSize: "13px", color: "var(--text-muted)", marginTop: "6px", fontWeight: "500" }}>ETH</div>
             </div>
             
             <div style={{
-              padding: "16px",
-              background: "var(--bg-card)",
-              borderRadius: "8px",
-              border: "1px solid var(--border)",
-              boxShadow: "var(--shadow)"
+              padding: "24px",
+              background: "linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(251, 191, 36, 0.08) 100%)",
+              borderRadius: "16px",
+              border: "1px solid rgba(245, 158, 11, 0.2)",
+              boxShadow: "var(--shadow-md)",
+              transition: "all 0.3s ease"
             }}>
-              <div style={{ fontSize: "11px", color: "var(--text-muted)", marginBottom: "8px", textTransform: "uppercase", letterSpacing: "0.5px", fontWeight: "500" }}>
+              <div style={{ fontSize: "11px", color: "var(--text-muted)", marginBottom: "10px", textTransform: "uppercase", letterSpacing: "0.8px", fontWeight: "600" }}>
                 Accrued Yield
               </div>
-              <div style={{ fontSize: "20px", fontWeight: "600", color: "#d97706", lineHeight: "1.2" }}>
+              <div style={{ fontSize: "24px", fontWeight: "700", color: "#d97706", lineHeight: "1.2" }}>
                 {parseFloat(accruedYield).toFixed(6)}
               </div>
-              <div style={{ fontSize: "12px", color: "var(--text-muted)", marginTop: "4px" }}>ETH</div>
+              <div style={{ fontSize: "13px", color: "var(--text-muted)", marginTop: "6px", fontWeight: "500" }}>ETH</div>
             </div>
             
             <div style={{
-              padding: "16px",
-              background: "var(--bg-card)",
-              borderRadius: "8px",
-              border: "1px solid var(--border)",
-              boxShadow: "var(--shadow)"
+              padding: "24px",
+              background: "linear-gradient(135deg, rgba(129, 140, 248, 0.08) 0%, rgba(165, 180, 252, 0.08) 100%)",
+              borderRadius: "16px",
+              border: "1px solid rgba(129, 140, 248, 0.2)",
+              boxShadow: "var(--shadow-md)",
+              transition: "all 0.3s ease"
             }}>
-              <div style={{ fontSize: "11px", color: "var(--text-muted)", marginBottom: "8px", textTransform: "uppercase", letterSpacing: "0.5px", fontWeight: "500" }}>
+              <div style={{ fontSize: "11px", color: "var(--text-muted)", marginBottom: "10px", textTransform: "uppercase", letterSpacing: "0.8px", fontWeight: "600" }}>
                 Pending Yield
               </div>
-              <div style={{ fontSize: "20px", fontWeight: "600", color: "#818cf8", lineHeight: "1.2" }}>
+              <div style={{ fontSize: "24px", fontWeight: "700", color: "#6366f1", lineHeight: "1.2" }}>
                 {parseFloat(pendingYield).toFixed(6)}
               </div>
-              <div style={{ fontSize: "12px", color: "var(--text-muted)", marginTop: "4px" }}>ETH</div>
+              <div style={{ fontSize: "13px", color: "var(--text-muted)", marginTop: "6px", fontWeight: "500" }}>ETH</div>
             </div>
             
             <div style={{
-              padding: "16px",
+              padding: "24px",
               background: "var(--bg-card)",
-              borderRadius: "8px",
-              border: "1px solid var(--border)",
-              boxShadow: "var(--shadow)"
+              borderRadius: "16px",
+              border: "1.5px solid var(--border)",
+              boxShadow: "var(--shadow-md)",
+              transition: "all 0.3s ease"
             }}>
-              <div style={{ fontSize: "11px", color: "var(--text-muted)", marginBottom: "8px", textTransform: "uppercase", letterSpacing: "0.5px", fontWeight: "500" }}>
+              <div style={{ fontSize: "11px", color: "var(--text-muted)", marginBottom: "10px", textTransform: "uppercase", letterSpacing: "0.8px", fontWeight: "600" }}>
                 APY Rate
               </div>
-              <div style={{ fontSize: "20px", fontWeight: "600", color: "var(--primary)", lineHeight: "1.2" }}>
+              <div style={{ fontSize: "24px", fontWeight: "700", background: "var(--gradient-primary)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text", lineHeight: "1.2" }}>
                 {apyRate ? (parseInt(apyRate) / 100).toFixed(2) : "N/A"}%
               </div>
             </div>
