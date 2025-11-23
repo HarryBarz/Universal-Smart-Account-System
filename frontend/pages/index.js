@@ -207,28 +207,47 @@ export default function Home() {
         {/* Tab Navigation */}
         <div style={{ 
           display: "flex", 
-          gap: "1rem", 
-          marginTop: "1.5rem",
-          justifyContent: "center"
+          gap: "12px", 
+          marginTop: "24px",
+          justifyContent: "center",
+          flexWrap: "wrap"
         }}>
           <button
             onClick={() => setActiveTab("demo")}
-            className={activeTab === "demo" ? "btn btn-primary" : "btn"}
-            style={{ padding: "0.75rem 1.5rem" }}
+            className={activeTab === "demo" ? "btn btn-primary" : "btn btn-secondary"}
+            style={{ 
+              padding: "12px 24px",
+              fontSize: "14px",
+              fontWeight: "500",
+              borderRadius: "8px",
+              transition: "all 0.2s ease"
+            }}
           >
             Demo: Swap + NFT
           </button>
           <button
             onClick={() => setActiveTab("vault")}
-            className={activeTab === "vault" ? "btn btn-primary" : "btn"}
-            style={{ padding: "0.75rem 1.5rem" }}
+            className={activeTab === "vault" ? "btn btn-primary" : "btn btn-secondary"}
+            style={{ 
+              padding: "12px 24px",
+              fontSize: "14px",
+              fontWeight: "500",
+              borderRadius: "8px",
+              transition: "all 0.2s ease"
+            }}
           >
             Omnichain Vault
           </button>
           <button
             onClick={() => setActiveTab("contracts")}
-            className={activeTab === "contracts" ? "btn btn-primary" : "btn"}
-            style={{ padding: "0.75rem 1.5rem" }}
+            className={activeTab === "contracts" ? "btn btn-primary" : "btn btn-secondary"}
+            style={{ 
+              padding: "12px 24px",
+              fontSize: "14px",
+              fontWeight: "500",
+              borderRadius: "8px",
+              transition: "all 0.2s ease"
+            }}
           >
             Contract Interactions
           </button>
