@@ -338,28 +338,29 @@ export default function ContractInteractions({
   return (
     <div>
       {/* Chain Selector */}
-      <div style={{ marginBottom: "1.5rem" }}>
-        <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "bold", fontSize: "1.125rem" }}>
-          Select Chain:
+      <div className="card" style={{ marginBottom: "24px" }}>
+        <label style={{ display: "block", marginBottom: "8px", fontWeight: "600", fontSize: "14px", color: "var(--text)" }}>
+          Select Chain
         </label>
-        <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+        <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
           <select
             value={activeChain}
             onChange={(e) => setActiveChain(e.target.value)}
             className="input"
-            style={{ flex: 1 }}
+            style={{ flex: 1, marginBottom: 0 }}
           >
             <option value="chainA">Base Sepolia (Chain A)</option>
             <option value="chainB">Arbitrum Sepolia (Chain B)</option>
           </select>
           <div style={{ 
-            padding: "0.5rem 1rem", 
-            background: "var(--bg)", 
-            borderRadius: "0.5rem",
+            padding: "10px 16px", 
+            background: "var(--bg-hover)", 
+            borderRadius: "6px",
             border: "1px solid var(--border)",
-            fontSize: "0.875rem",
-            fontWeight: "600",
-            color: "var(--primary)"
+            fontSize: "13px",
+            fontWeight: "500",
+            color: "var(--text)",
+            whiteSpace: "nowrap"
           }}>
             {addresses.chainName}
           </div>
@@ -367,134 +368,144 @@ export default function ContractInteractions({
       </div>
 
       {/* Vault Data Display */}
-      <div className="card" style={{ 
-        marginBottom: "1.5rem",
-        background: "linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)",
-        border: "1px solid var(--primary)"
-      }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
-          <h4 style={{ margin: 0, fontSize: "1.25rem", fontWeight: "700" }}>
-            💰 Vault Dashboard ({addresses.chainName})
-          </h4>
+      <div className="card" style={{ marginBottom: "24px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+          <div>
+            <h4 style={{ margin: 0, fontSize: "18px", fontWeight: "600", color: "var(--text)", marginBottom: "4px" }}>
+              Vault Dashboard
+            </h4>
+            <p style={{ margin: 0, fontSize: "13px", color: "var(--text-muted)", fontWeight: "400" }}>
+              {addresses.chainName}
+            </p>
+          </div>
           <button 
             onClick={loadVaultData} 
             disabled={loading} 
-            className="btn" 
+            className="btn btn-secondary"
             style={{ 
-              padding: "0.5rem 1rem",
-              fontSize: "0.875rem",
-              background: "rgba(99, 102, 241, 0.2)",
-              border: "1px solid var(--primary)"
+              padding: "8px 16px",
+              fontSize: "13px"
             }}
           >
-            {loading ? "⏳ Loading..." : "🔄 Refresh"}
+            {loading ? "Loading..." : "Refresh"}
           </button>
         </div>
 
         {vaultBalance !== null ? (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1rem" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "16px" }}>
             <div style={{
-              padding: "1rem",
-              background: "var(--bg)",
-              borderRadius: "0.5rem",
-              border: "1px solid var(--border)"
+              padding: "16px",
+              background: "var(--bg-card)",
+              borderRadius: "8px",
+              border: "1px solid var(--border)",
+              boxShadow: "var(--shadow)"
             }}>
-              <div style={{ fontSize: "0.75rem", color: "var(--text-muted)", marginBottom: "0.25rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+              <div style={{ fontSize: "11px", color: "var(--text-muted)", marginBottom: "8px", textTransform: "uppercase", letterSpacing: "0.5px", fontWeight: "500" }}>
                 Total Balance
               </div>
-              <div style={{ fontSize: "1.5rem", fontWeight: "700", color: "var(--success)" }}>
-                {parseFloat(vaultBalance).toFixed(6)} ETH
+              <div style={{ fontSize: "24px", fontWeight: "600", color: "var(--text)", lineHeight: "1.2" }}>
+                {parseFloat(vaultBalance).toFixed(6)}
               </div>
+              <div style={{ fontSize: "12px", color: "var(--text-muted)", marginTop: "4px" }}>ETH</div>
             </div>
             
             <div style={{
-              padding: "1rem",
-              background: "var(--bg)",
-              borderRadius: "0.5rem",
-              border: "1px solid var(--border)"
+              padding: "16px",
+              background: "var(--bg-card)",
+              borderRadius: "8px",
+              border: "1px solid var(--border)",
+              boxShadow: "var(--shadow)"
             }}>
-              <div style={{ fontSize: "0.75rem", color: "var(--text-muted)", marginBottom: "0.25rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+              <div style={{ fontSize: "11px", color: "var(--text-muted)", marginBottom: "8px", textTransform: "uppercase", letterSpacing: "0.5px", fontWeight: "500" }}>
                 Principal
               </div>
-              <div style={{ fontSize: "1.25rem", fontWeight: "600", color: "var(--text)" }}>
-                {parseFloat(principalBalance).toFixed(6)} ETH
+              <div style={{ fontSize: "20px", fontWeight: "600", color: "var(--text)", lineHeight: "1.2" }}>
+                {parseFloat(principalBalance).toFixed(6)}
               </div>
+              <div style={{ fontSize: "12px", color: "var(--text-muted)", marginTop: "4px" }}>ETH</div>
             </div>
             
             <div style={{
-              padding: "1rem",
-              background: "var(--bg)",
-              borderRadius: "0.5rem",
-              border: "1px solid var(--border)"
+              padding: "16px",
+              background: "var(--bg-card)",
+              borderRadius: "8px",
+              border: "1px solid var(--border)",
+              boxShadow: "var(--shadow)"
             }}>
-              <div style={{ fontSize: "0.75rem", color: "var(--text-muted)", marginBottom: "0.25rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+              <div style={{ fontSize: "11px", color: "var(--text-muted)", marginBottom: "8px", textTransform: "uppercase", letterSpacing: "0.5px", fontWeight: "500" }}>
                 Accrued Yield
               </div>
-              <div style={{ fontSize: "1.25rem", fontWeight: "600", color: "var(--warning)" }}>
-                {parseFloat(accruedYield).toFixed(6)} ETH
+              <div style={{ fontSize: "20px", fontWeight: "600", color: "#d97706", lineHeight: "1.2" }}>
+                {parseFloat(accruedYield).toFixed(6)}
               </div>
+              <div style={{ fontSize: "12px", color: "var(--text-muted)", marginTop: "4px" }}>ETH</div>
             </div>
             
             <div style={{
-              padding: "1rem",
-              background: "var(--bg)",
-              borderRadius: "0.5rem",
-              border: "1px solid var(--border)"
+              padding: "16px",
+              background: "var(--bg-card)",
+              borderRadius: "8px",
+              border: "1px solid var(--border)",
+              boxShadow: "var(--shadow)"
             }}>
-              <div style={{ fontSize: "0.75rem", color: "var(--text-muted)", marginBottom: "0.25rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+              <div style={{ fontSize: "11px", color: "var(--text-muted)", marginBottom: "8px", textTransform: "uppercase", letterSpacing: "0.5px", fontWeight: "500" }}>
                 Pending Yield
               </div>
-              <div style={{ fontSize: "1.25rem", fontWeight: "600", color: "var(--primary-light)" }}>
-                {parseFloat(pendingYield).toFixed(6)} ETH
+              <div style={{ fontSize: "20px", fontWeight: "600", color: "#818cf8", lineHeight: "1.2" }}>
+                {parseFloat(pendingYield).toFixed(6)}
               </div>
+              <div style={{ fontSize: "12px", color: "var(--text-muted)", marginTop: "4px" }}>ETH</div>
             </div>
             
             <div style={{
-              padding: "1rem",
-              background: "var(--bg)",
-              borderRadius: "0.5rem",
-              border: "1px solid var(--border)"
+              padding: "16px",
+              background: "var(--bg-card)",
+              borderRadius: "8px",
+              border: "1px solid var(--border)",
+              boxShadow: "var(--shadow)"
             }}>
-              <div style={{ fontSize: "0.75rem", color: "var(--text-muted)", marginBottom: "0.25rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+              <div style={{ fontSize: "11px", color: "var(--text-muted)", marginBottom: "8px", textTransform: "uppercase", letterSpacing: "0.5px", fontWeight: "500" }}>
                 APY Rate
               </div>
-              <div style={{ fontSize: "1.25rem", fontWeight: "600", color: "var(--primary)" }}>
+              <div style={{ fontSize: "20px", fontWeight: "600", color: "var(--primary)", lineHeight: "1.2" }}>
                 {apyRate ? (parseInt(apyRate) / 100).toFixed(2) : "N/A"}%
               </div>
             </div>
             
             {tokenBalance !== null && (
               <div style={{
-                padding: "1rem",
-                background: "var(--bg)",
-                borderRadius: "0.5rem",
-                border: "1px solid var(--border)"
+                padding: "16px",
+                background: "var(--bg-card)",
+                borderRadius: "8px",
+                border: "1px solid var(--border)",
+                boxShadow: "var(--shadow)"
               }}>
-                <div style={{ fontSize: "0.75rem", color: "var(--text-muted)", marginBottom: "0.25rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>
-                  Token Balance (OFT)
+                <div style={{ fontSize: "11px", color: "var(--text-muted)", marginBottom: "8px", textTransform: "uppercase", letterSpacing: "0.5px", fontWeight: "500" }}>
+                  Token Balance
                 </div>
-                <div style={{ fontSize: "1.25rem", fontWeight: "600", color: "var(--secondary)" }}>
-                  {parseFloat(tokenBalance).toFixed(6)} OVT
+                <div style={{ fontSize: "20px", fontWeight: "600", color: "var(--text)", lineHeight: "1.2" }}>
+                  {parseFloat(tokenBalance).toFixed(6)}
                 </div>
+                <div style={{ fontSize: "12px", color: "var(--text-muted)", marginTop: "4px" }}>OVT</div>
               </div>
             )}
           </div>
         ) : (
-          <div style={{ textAlign: "center", padding: "2rem", color: "var(--text-muted)" }}>
+          <div style={{ textAlign: "center", padding: "48px 24px", color: "var(--text-muted)", fontSize: "14px" }}>
             {loading ? "Loading vault data..." : "Click Refresh to load vault data"}
           </div>
         )}
       </div>
 
       {/* Direct Vault Functions */}
-      <div className="card" style={{ marginBottom: "1.5rem" }}>
-        <h4 style={{ marginBottom: "0.5rem", fontSize: "1.125rem", fontWeight: "700" }}>
-          🏦 Direct Vault Functions
+      <div className="card" style={{ marginBottom: "24px" }}>
+        <h4 style={{ marginBottom: "4px", fontSize: "16px", fontWeight: "600", color: "var(--text)" }}>
+          Direct Vault Functions
         </h4>
-        <p style={{ fontSize: "0.875rem", color: "var(--text-muted)", marginBottom: "1rem" }}>
+        <p style={{ fontSize: "13px", color: "var(--text-muted)", marginBottom: "16px", lineHeight: "1.5" }}>
           Call vault contract functions directly from your wallet (no bundler/router needed)
         </p>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1rem" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "12px" }}>
           <button 
             onClick={() => {
               const amount = prompt("Enter amount to deposit (ETH):");
@@ -503,15 +514,12 @@ export default function ContractInteractions({
             className="btn btn-primary"
             disabled={!addresses.vault}
             style={{ 
-              padding: "1rem",
-              fontSize: "1rem",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "0.5rem"
+              padding: "12px 20px",
+              fontSize: "14px",
+              justifyContent: "center"
             }}
           >
-            💰 Deposit to Vault
+            Deposit to Vault
           </button>
           <button 
             onClick={() => {
@@ -521,29 +529,26 @@ export default function ContractInteractions({
             className="btn btn-secondary"
             disabled={!addresses.vault}
             style={{ 
-              padding: "1rem",
-              fontSize: "1rem",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "0.5rem"
+              padding: "12px 20px",
+              fontSize: "14px",
+              justifyContent: "center"
             }}
           >
-            💸 Withdraw from Vault
+            Withdraw from Vault
           </button>
         </div>
       </div>
 
       {/* Vault Token Functions */}
       {addresses.vaultToken && addresses.vaultToken !== "0x0000000000000000000000000000000000000000" ? (
-        <div className="card" style={{ marginBottom: "1.5rem" }}>
-          <h4 style={{ marginBottom: "0.5rem", fontSize: "1.125rem", fontWeight: "700" }}>
-            🌐 Vault Token (OFT) Functions
+        <div className="card" style={{ marginBottom: "24px" }}>
+          <h4 style={{ marginBottom: "4px", fontSize: "16px", fontWeight: "600", color: "var(--text)" }}>
+            Vault Token (OFT) Functions
           </h4>
-          <p style={{ fontSize: "0.875rem", color: "var(--text-muted)", marginBottom: "1rem" }}>
+          <p style={{ fontSize: "13px", color: "var(--text-muted)", marginBottom: "16px", lineHeight: "1.5" }}>
             Deposit/withdraw using OFT tokens - enables seamless cross-chain transfers via LayerZero
           </p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1rem" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "12px" }}>
             <button 
               onClick={() => {
                 const amount = prompt("Enter amount to deposit (ETH):");
@@ -551,15 +556,12 @@ export default function ContractInteractions({
               }}
               className="btn btn-primary"
               style={{ 
-                padding: "1rem",
-                fontSize: "1rem",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "0.5rem"
+                padding: "12px 20px",
+                fontSize: "14px",
+                justifyContent: "center"
               }}
             >
-              💎 Deposit & Get Tokens
+              Deposit & Get Tokens
             </button>
             <button 
               onClick={() => {
@@ -568,24 +570,21 @@ export default function ContractInteractions({
               }}
               className="btn btn-secondary"
               style={{ 
-                padding: "1rem",
-                fontSize: "1rem",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "0.5rem"
+                padding: "12px 20px",
+                fontSize: "14px",
+                justifyContent: "center"
               }}
             >
-              🔄 Withdraw Tokens
+              Withdraw Tokens
             </button>
           </div>
         </div>
       ) : (
-        <div className="card" style={{ marginBottom: "1.5rem", opacity: 0.6 }}>
-          <h4 style={{ marginBottom: "0.5rem", fontSize: "1.125rem", fontWeight: "700" }}>
-            🌐 Vault Token (OFT) Functions
+        <div className="card" style={{ marginBottom: "24px", opacity: 0.6 }}>
+          <h4 style={{ marginBottom: "4px", fontSize: "16px", fontWeight: "600", color: "var(--text)" }}>
+            Vault Token (OFT) Functions
           </h4>
-          <p style={{ fontSize: "0.875rem", color: "var(--text-muted)" }}>
+          <p style={{ fontSize: "13px", color: "var(--text-muted)", lineHeight: "1.5" }}>
             Vault token (OFT) not deployed yet. Deploy OmnichainVaultToken to enable cross-chain transfers.
           </p>
         </div>
@@ -593,14 +592,14 @@ export default function ContractInteractions({
 
       {/* Router Functions */}
       {addresses.router && (
-        <div className="card" style={{ marginBottom: "1.5rem" }}>
-          <h4 style={{ marginBottom: "0.5rem", fontSize: "1.125rem", fontWeight: "700" }}>
-            🔗 Router Functions
+        <div className="card" style={{ marginBottom: "24px" }}>
+          <h4 style={{ marginBottom: "4px", fontSize: "16px", fontWeight: "600", color: "var(--text)" }}>
+            Router Functions
           </h4>
-          <p style={{ fontSize: "0.875rem", color: "var(--text-muted)", marginBottom: "1rem" }}>
+          <p style={{ fontSize: "13px", color: "var(--text-muted)", marginBottom: "16px", lineHeight: "1.5" }}>
             View router functions (cross-chain actions require bundler authorization)
           </p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1rem" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "12px" }}>
             <button 
               onClick={async () => {
                 const actionId = prompt("Enter action ID to check:");
@@ -608,73 +607,87 @@ export default function ContractInteractions({
                   onStatusUpdate("Checking action status...", "info");
                   const executed = await checkActionExecuted(actionId);
                   onStatusUpdate(
-                    `Action ${actionId.substring(0, 8)}...${actionId.substring(56)} is ${executed ? "✅ executed" : "⏳ not executed"}`,
+                    `Action ${actionId.substring(0, 8)}...${actionId.substring(56)} is ${executed ? "executed" : "not executed"}`,
                     executed ? "success" : "info"
                   );
                 }
               }}
-              className="btn"
+              className="btn btn-secondary"
               style={{ 
-                padding: "0.75rem 1rem",
-                fontSize: "0.875rem"
+                padding: "12px 20px",
+                fontSize: "14px",
+                justifyContent: "center"
               }}
             >
-              🔍 Check Action Status
+              Check Action Status
             </button>
             <button 
               onClick={() => {
-                onStatusUpdate("💡 Router functions require authorization. Use the bundler tab for cross-chain actions.", "info");
+                onStatusUpdate("Router functions require authorization. Use the bundler tab for cross-chain actions.", "info");
               }}
-              className="btn"
+              className="btn btn-secondary"
               style={{ 
-                padding: "0.75rem 1rem",
-                fontSize: "0.875rem"
+                padding: "12px 20px",
+                fontSize: "14px",
+                justifyContent: "center"
               }}
             >
-              💰 Quote Fee
+              Quote Fee
             </button>
           </div>
         </div>
       )}
 
       {/* Contract Addresses */}
-      <div className="card" style={{ 
-        marginTop: "1.5rem",
-        background: "var(--bg)",
-        opacity: 0.9
-      }}>
-        <h4 style={{ marginBottom: "0.75rem", fontSize: "1rem", fontWeight: "600" }}>
-          📋 Contract Addresses ({addresses.chainName})
+      <div className="card" style={{ marginTop: "24px" }}>
+        <h4 style={{ marginBottom: "12px", fontSize: "14px", fontWeight: "600", color: "var(--text)" }}>
+          Contract Addresses
         </h4>
-        <div style={{ display: "grid", gap: "0.5rem", fontFamily: "monospace", fontSize: "0.75rem" }}>
+        <p style={{ fontSize: "12px", color: "var(--text-muted)", marginBottom: "16px" }}>
+          {addresses.chainName}
+        </p>
+        <div style={{ display: "grid", gap: "8px", fontFamily: "'SF Mono', 'Monaco', 'Courier New', monospace", fontSize: "12px" }}>
           <div style={{ 
-            padding: "0.5rem", 
-            background: addresses.vault ? "rgba(16, 185, 129, 0.1)" : "rgba(239, 68, 68, 0.1)",
-            borderRadius: "0.25rem",
-            border: `1px solid ${addresses.vault ? "var(--success)" : "var(--error)"}`
+            padding: "12px", 
+            background: "var(--bg-hover)",
+            borderRadius: "6px",
+            border: "1px solid var(--border)"
           }}>
-            <strong style={{ color: addresses.vault ? "var(--success)" : "var(--error)" }}>
-              Vault:
-            </strong> {addresses.vault || "❌ Not configured"}
+            <div style={{ fontSize: "11px", color: "var(--text-muted)", marginBottom: "4px", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+              Vault
+            </div>
+            <div style={{ color: addresses.vault ? "var(--text)" : "var(--error)", wordBreak: "break-all" }}>
+              {addresses.vault || "Not configured"}
+            </div>
           </div>
           {addresses.vaultToken && addresses.vaultToken !== "0x0000000000000000000000000000000000000000" && (
             <div style={{ 
-              padding: "0.5rem", 
-              background: "rgba(139, 92, 246, 0.1)",
-              borderRadius: "0.25rem",
-              border: "1px solid var(--secondary)"
+              padding: "12px", 
+              background: "var(--bg-hover)",
+              borderRadius: "6px",
+              border: "1px solid var(--border)"
             }}>
-              <strong style={{ color: "var(--secondary)" }}>Vault Token (OFT):</strong> {addresses.vaultToken}
+              <div style={{ fontSize: "11px", color: "var(--text-muted)", marginBottom: "4px", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                Vault Token (OFT)
+              </div>
+              <div style={{ color: "var(--text)", wordBreak: "break-all" }}>
+                {addresses.vaultToken}
+              </div>
             </div>
           )}
           {addresses.router && (
             <div style={{ 
-              padding: "0.5rem", 
-              background: "rgba(99, 102, 241, 0.1)",
-              borderRadius: "0.25rem",
-              border: "1px solid var(--primary)"
+              padding: "12px", 
+              background: "var(--bg-hover)",
+              borderRadius: "6px",
+              border: "1px solid var(--border)"
             }}>
-              <strong style={{ color: "var(--primary)" }}>Router:</strong> {addresses.router}
+              <div style={{ fontSize: "11px", color: "var(--text-muted)", marginBottom: "4px", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                Router
+              </div>
+              <div style={{ color: "var(--text)", wordBreak: "break-all" }}>
+                {addresses.router}
+              </div>
             </div>
           )}
         </div>
